@@ -1,7 +1,11 @@
 PLUGIN_DEF_DIR = $(BASEDIR)include
 
 OS_TYPE := $(shell uname -s)
+# Permite sobreescribir el compilador: make CXX=g++ / make CC=g++
+# (origin default = make lo definio implicitamente como "cc")
+ifeq ($(origin CC),default)
 CC = clang++
+endif
 CPP = $(CC) -E
 AR = ar
 

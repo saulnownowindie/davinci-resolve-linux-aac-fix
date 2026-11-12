@@ -1,0 +1,9 @@
+# Los scripts deben conservar LF para ejecutarse en Linux
+*.sh text eol=lf
+Makefile text eol=lf
+.mk.defs text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.md text eol=lf
+LICENSE text eol=lf
+.gitignore text eol=lf

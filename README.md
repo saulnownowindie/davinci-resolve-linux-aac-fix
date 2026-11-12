@@ -16,6 +16,15 @@ Este repo contiene un **plugin AAC Encoder** basado en FFmpeg que se integra con
 
 > **Nota:** El plugin requiere **DaVinci Resolve Studio** (la versión gratuita no soporta plugins de terceros).
 
+## Sobre el instalador oficial
+
+El binario instalador **no se incluye en este repositorio** por dos razones:
+
+1. La licencia de Blackmagic Design prohíbe redistribuir el instalador.
+2. Pesa ~2.8 GB, muy por encima del límite práctico de archivos de GitHub (100 MB / recomendado < 1 GB con LFS).
+
+En su lugar, el repo incluye `scripts/download-resolve.sh` con los pasos exactos para obtener **DaVinci Resolve 21.x** (última versión) desde la web oficial, y `scripts/install-all.sh`, que detecta el `.run` en la raíz del repo y hace la instalación completa de forma automática. El `.gitignore` excluye los `.run`/`.zip` para que nunca se suban por accidente.
+
 ## Estructura del repo
 
 ```
@@ -131,6 +140,18 @@ Ver `scripts/convert-media.sh` para más opciones.
 - **Sample rates:** 44100, 48000 Hz
 - **Bit depths:** 16-bit, 24-bit PCM
 - **Formato interno:** Planar float (FLTP) - óptimo para AAC
+
+## Adaptaciones sobre el fix original
+
+El código del plugin se integró tal cual desde el upstream, con tres ajustes para que funcione fuera de Red Hat:
+
+| Cambio | Motivo |
+|--------|--------|
+| `Makefile`: eliminadas las rutas hardcodeadas `/usr/include/c++/14` y `/usr/include/c++/x86_64-redhat-linux/14` | No existen en Ubuntu/Debian; clang++ localiza libstdc++ automáticamente |
+| `.mk.defs`: `CC` solo se fija a `clang++` si no hay override | Permite `make CC=g++` sin editar archivos |
+| `.gitattributes`: EOL forzado a LF en `*.sh` y fuentes | Evita shebangs rotos por CRLF al clonar desde Windows |
+
+El resto (`audio_encoder.cpp`, `plugin.cpp`, `wrapper/`, `include/`) es una copia fiel del upstream.
 
 ## Créditos
 

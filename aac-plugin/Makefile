@@ -22,7 +22,16 @@ HEADERS = plugin.h audio_encoder.h
 SRCS = plugin.cpp audio_encoder.cpp wrapper/host_api.cpp
 OBJS = $(SRCS:%.cpp=$(OBJDIR)/%.o)
 
-CFLAGS += -I$(BASEDIR)/wrapper -I/usr/include/c++/14 -stdlib=libstdc++ -I/usr/include/c++/x86_64-redhat-linux/14
+# Portabilidad: el repo original fijaba rutas de GCC 14 de Red Hat
+# (/usr/include/c++/14, /usr/include/c++/x86_64-redhat-linux/14) que no
+# existen en Ubuntu/Debian u otras distros. clang++ resuelve libstdc++
+# por si mismo; solo forzamos -stdlib cuando el compilador es clang.
+CFLAGS += -I$(BASEDIR)/wrapper
+ifeq ($(OS_TYPE), Linux)
+  ifneq (,$(findstring clang,$(CC)))
+    CFLAGS += -stdlib=libstdc++
+  endif
+endif
 
 all: prereq make-subdirs $(HEADERS) $(SRCS) $(OBJS) $(TARGET)
 
