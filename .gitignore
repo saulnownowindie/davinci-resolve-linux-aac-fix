@@ -1,0 +1,20 @@
+# Build artifacts
+build/
+bin/
+aac_encoder_plugin.dvcp.bundle/
+
+# DaVinci installer (no redistribuir el binario)
+DaVinci_Resolve_*.run
+DaVinci_Resolve_*.zip
+*.deb
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
